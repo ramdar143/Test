@@ -1,0 +1,56 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+{% block content %}
+
+<h2 class="payment-title">Select Payment Method for Order: {{ order.id }}</h2>
+<form method="post" class="payment-selection-form">
+    {% csrf_token %}
+
+    <!-- Payment Methods Selection -->
+    <div class="payment-methods">
+        <label class="section-label">Choose Payment Method</label>
+        <div class="payment-options">
+
+            <!-- PayPal -->
+            <div class="payment-option">
+                <input type="radio" id="paypal" name="method" value="paypal" required>
+                <label for="paypal" class="option-label">
+                    <img src="{% static 'images/paypal-logo.png' %}" alt="PayPal Logo" />
+                    <span>PayPal</span>
+                </label>
+            </div>    
+
+            <!-- GCash -->
+            <div class="payment-option">
+                <input type="radio" id="gcash" name="method" value="gcash" required>
+                <label for="gcash" class="option-label">
+                    <img src="{% static 'images/gcash-logo.png' %}" alt="GCash Logo" />
+                    <span>GCash</span>
+                </label>
+            </div>
+
+            <!-- Cash on Delivery (icon only) -->
+            <div class="payment-option">
+                <input type="radio" id="cod" name="method" value="cod" required>
+                <label for="cod" class="option-label cod-icon">
+                    <i class="fas fa-money-bill-wave"></i>
+                    <span>COD</span>
+                </label>
+            </div>
+        </div>
+    </div>
+
+    <!-- Display Fields for Specific Payment Methods -->
+    <div class="payment-form">
+        {% if payment_form.method.value == 'paypal' %}
+            {{ paypal_form.as_p }}
+        {% elif payment_form.method.value == 'gcash' %}
+            {{ gcash_form.as_p }}
+        {% elif payment_form.method.value == 'cod' %}
+            <p>Selected Cash on Delivery. No additional details needed.</p>
+        {% endif %}
+    </div>
+    <button type="submit" class="submit-btn">Proceed</button>
+</form>
+
+{% endblock %}

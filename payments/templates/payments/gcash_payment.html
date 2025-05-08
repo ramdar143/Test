@@ -1,0 +1,25 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+
+{% block content %}
+  <link rel="stylesheet" href="{% static 'css/paypal_gcash_payment.css' %}">
+
+  <div class="payment-page-wrapper">
+    <h1 class="form-header">GCash Payment</h1>
+    <p class="payment-description">Please enter your GCash number to complete your payment.</p>
+
+    <form method="POST">
+      {% csrf_token %}
+      <div class="form-fields">
+        <div class="field-group">
+          <label for="{{ gcash_form.gcash_number.id_for_label }}"><i class="fas fa-mobile-alt"></i> GCash Number</label>
+          {{ gcash_form.gcash_number }}
+        </div>
+      </div>
+
+      <div class="form-actions">
+        <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Confirm GCash Payment</button>
+      </div>
+    </form>
+  </div>
+{% endblock %}

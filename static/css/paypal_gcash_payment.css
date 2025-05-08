@@ -1,0 +1,88 @@
+/* Common Styles for Payment Pages (PayPal, GCash) */
+.payment-page-wrapper {
+    max-width: 800px;
+    margin: 30px auto;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-header {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  .payment-description {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    color: #777;
+    text-align: center;
+  }
+  
+  .form-fields .field-group {
+    margin-bottom: 20px;
+  }
+  
+  .field-group label {
+    display: block;
+    font-size: 1rem;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 8px;
+  }
+  
+  .field-group input {
+    width: 100%;
+    padding: 10px;
+    font-size: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+  }
+  
+  .field-group i {
+    margin-right: 10px;
+    color: #007bff;
+  }
+  
+  .btn-submit {
+    width: 100%;
+    padding: 12px;
+    font-size: 1.2rem;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+  
+  .btn-submit i {
+    margin-right: 8px;
+  }
+  
+  .btn-submit:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Additional Styles for Responsive Design */
+  @media (max-width: 768px) {
+    .payment-page-wrapper {
+      padding: 15px;
+    }
+  
+    .form-header {
+      font-size: 1.8rem;
+    }
+  
+    .form-fields .field-group input {
+      font-size: 0.95rem;
+    }
+  
+    .btn-submit {
+      font-size: 1.1rem;
+    }
+  }
+  

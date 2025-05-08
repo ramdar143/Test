@@ -1,0 +1,16 @@
+<!-- templates/preparation/schedule_slot_form.html -->
+{% extends 'base_for_admin.html' %}
+
+{% block title %}Create/Update Schedule Slot{% endblock %}
+
+{% block content %}
+<h1>{% if object %}Edit{% else %}Create{% endif %} Schedule Slot</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-primary">Save</button>
+</form>
+
+<a href="{% url 'preparation:schedule_slot_changelist' %}" class="btn btn-secondary">Back to List</a>
+{% endblock %}

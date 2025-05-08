@@ -1,0 +1,44 @@
+<!-- templates/preparation/schedule_slot_list.html -->
+{% extends 'base_for_admin.html' %}
+
+{% block title %}Manage Schedule Slots{% endblock %}
+
+{% block content %}
+<h1>Manage Schedule Slots</h1>
+
+<!-- Button to create new ScheduleSlot -->
+<a href="{% url 'preparation:schedule_slot_create' %}" class="btn btn-primary">Create New Slot</a>
+
+<!-- List of Schedule Slots -->
+<table class="table table-striped mt-3">
+    <thead>
+        <tr>
+            <th>Task</th>
+            <th>Staff</th>
+            <th>Start Time</th>
+            <th>End Time</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for slot in schedule_slots %}
+        <tr>
+            <td>{{ slot.task.task_name }}</td>
+            <td>{{ slot.staff }}</td>
+            <td>{{ slot.start_time }}</td>
+            <td>{{ slot.end_time }}</td>
+            <td>
+                <!-- Links for editing and deleting -->
+                <a href="{% url 'preparation:schedule_slot_edit' slot.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                <a href="{% url 'preparation:schedule_slot_delete' slot.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure you want to delete this slot?')">Delete</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if not schedule_slots %}
+    <p>No schedule slots found.</p>
+{% endif %}
+
+{% endblock %}

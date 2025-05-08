@@ -1,0 +1,38 @@
+{% extends "base_for_kitchenstaff.html" %}
+{% block content %}
+<h2>Your Prep Tasks</h2>
+<table>
+    <thead>
+        <tr>
+            <th>Order</th>
+            <th>Description</th>
+            <th>Due Time</th>
+            <th>Status</th>
+            <th>Overdue?</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for task in tasks %}
+        <tr>
+            <td>{{ task.related_order }}</td>
+            <td>{{ task.description }}</td>
+            <td>{{ task.due_time }}</td>
+            <td>{{ task.status }}</td>
+            <td>
+                {% if task.is_overdue %}
+                    <span style="color: red;">Yes</span>
+                {% else %}
+                    No
+                {% endif %}
+            </td>
+            <td>
+                <a href="{% url 'preparation:prep_task_update' task.pk %}">Edit</a>
+            </td>
+        </tr>
+    {% empty %}
+        <tr><td colspan="6">No tasks assigned.</td></tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

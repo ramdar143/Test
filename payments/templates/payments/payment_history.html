@@ -1,0 +1,28 @@
+<h1>Your Payment History</h1>
+
+<table>
+    <thead>
+        <tr>
+            <th>Invoice ID</th>
+            <th>Amount Paid</th>
+            <th>Payment Method</th>
+            <th>Payment Date</th>
+            <th>Confirmation Code</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for payment in payments %}
+            <tr>
+                <td>{{ payment.invoice.id }}</td>
+                <td>₱{{ payment.amount }}</td>
+                <td>{{ payment.method }}</td>
+                <td>{{ payment.payment_date }}</td>
+                <td>{{ payment.confirmation_code }}</td>
+            </tr>
+        {% empty %}
+            <tr>
+                <td colspan="5">You have no payment history.</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

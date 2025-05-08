@@ -1,0 +1,42 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/userform.css' %}">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
+<div class="login-page">
+  <div class="left-panel">
+    <!-- Home Button -->
+    <a href="{% url 'users:landing_page' %}" class="home-button">
+        <i class="fas fa-home"></i> Home
+    </a>
+
+    <h1>Welcome to Central Eatery</h1>
+    <p>Register to manage catering & orders</p>
+  </div>
+
+  <div class="right-panel">
+    <div class="form-container">
+      <h2>Staff Registration</h2>
+      <form method="post">
+        {% csrf_token %}
+        {% for field in form.visible_fields %}
+          <div class="form-group">
+            {{ field.label_tag }}
+            {{ field }}
+            {% for error in field.errors %}
+              <div class="errorlist">{{ error }}</div>
+            {% endfor %}
+          </div>
+        {% endfor %}
+        <button type="submit">Register</button>
+      </form>
+
+      <div class="login-link">
+        <p>Already have an account? <a href="{% url 'users:login' %}">Login here</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

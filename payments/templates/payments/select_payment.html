@@ -1,0 +1,42 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+
+{% block content %}
+<h2>Order: {{ order.id }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ payment_form.as_p }}  <!-- Payment method selection -->
+    
+    <!-- PayPal payment form (hidden by default) -->
+    <div id="paypal-form" style="display: none;">
+        <h3>PayPal Payment</h3>
+        {{ paypal_form.as_p }}
+    </div>
+
+    <button type="submit">Submit</button>
+</form>
+
+<script>
+// JavaScript to show/hide PayPal form based on selected payment method
+document.addEventListener('DOMContentLoaded', function() {
+    const paymentMethodRadios = document.querySelectorAll('input[name="method"]');
+    const paypalForm = document.getElementById('paypal-form');
+
+    // Initially hide PayPal form
+    paypalForm.style.display = 'none';
+
+    // Add event listener for changes in the payment method radio buttons
+    paymentMethodRadios.forEach(function(radio) {
+        radio.addEventListener('change', function() {
+            if (this.value === 'paypal') {
+                paypalForm.style.display = 'block';  // Show PayPal form
+            } else {
+                paypalForm.style.display = 'none';  // Hide PayPal form
+            }
+        });
+    });
+});
+</script>
+
+{% endblock %}

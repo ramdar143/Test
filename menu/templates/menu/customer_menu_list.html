@@ -1,0 +1,27 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/customer_menu_list1.css' %}">
+
+<h1 class="menu-title">Menu</h1>
+<div class="menu-grid">
+    {% for item in items %}
+    <div class="menu-card">
+        <div class="menu-card-imgwrap">
+            <img src="{{ item.image.url }}" alt="{{ item.name }}" class="menu-image">
+        </div>
+        <div class="menu-card-content">
+            <div class="menu-item-name">{{ item.name }}</div>
+            <div class="menu-item-desc">{{ item.description|default:"No description provided." }}</div>
+        </div>
+        <div class="menu-card-footer">
+            <span class="price-pill">₱{{ item.price }}</span>
+            <a href="{% url 'orders:create_order' %}?item_id={{ item.id }}" class="order-btn">Order</a>
+        </div>
+    </div>
+    {% empty %}
+    <p class="no-items">No menu items available.</p>
+    {% endfor %}
+</div>
+{% endblock %}

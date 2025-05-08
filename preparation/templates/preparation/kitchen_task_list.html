@@ -1,0 +1,11 @@
+{% extends "base_for_kitchenstaff.html" %}
+{% block content %}
+<h1>Kitchen Prep Tasks</h1>
+<ul>
+  {% for task in tasks %}
+    <li>{{ task.name }} - {{ task.status }}</li>
+  {% empty %}
+    <li>No assigned tasks.</li>
+  {% endfor %}
+</ul>
+{% endblock %}

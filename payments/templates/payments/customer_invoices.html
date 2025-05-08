@@ -1,0 +1,18 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h1>Your Invoices</h1>
+    
+    {% if invoices %}
+        <ul>
+        {% for invoice in invoices %}
+            <li>
+                <a href="{% url 'invoice_detail' pk=invoice.pk %}">Invoice #{{ invoice.pk }}</a> - 
+                Amount: {{ invoice.amount }} - Status: {{ invoice.status }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>You have no invoices at the moment.</p>
+    {% endif %}
+{% endblock %}

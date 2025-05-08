@@ -1,0 +1,170 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/create_order1.css' %}">
+
+<div class="order-page-wrapper">
+  <h1 class="form-header">Create Your Order</h1>
+  <form method="POST" autocomplete="off">
+    {% csrf_token %}
+    <div class="three-column-layout">
+      {% if selected_item %}
+      <!-- Selected Item Preview -->
+      <div class="column selected-preview">
+        <h2>You're ordering: {{ selected_item.name }}</h2>
+        <img src="{{ selected_item.image.url }}" alt="{{ selected_item.name }}" />
+        <p>{{ selected_item.description|default:"No description available." }}</p>
+        <p><strong>Price: ₱{{ selected_item.price }}</strong></p>
+      </div>
+      {% endif %}
+      <!-- Order Details -->
+      <div class="column order-details">
+        <h2 class="section-title"><i class="fas fa-info-circle"></i> Order Details</h2>
+        <div class="form-fields">
+          <div class="field-group">
+            <label for="{{ order_form.customer_contact.id_for_label }}"><i class="fas fa-user"></i> {{ order_form.customer_contact.label }}</label>
+            {{ order_form.customer_contact }}
+          </div>
+          <div class="field-group">
+            <label for="{{ order_form.event_date.id_for_label }}"><i class="fas fa-calendar-alt"></i> {{ order_form.event_date.label }}</label>
+            {{ order_form.event_date }}
+          </div>
+          <div class="field-group">
+            <label for="{{ order_form.event_type.id_for_label }}"><i class="fas fa-list"></i> {{ order_form.event_type.label }}</label>
+            {{ order_form.event_type }}
+          </div>
+          <div class="field-group">
+            <label for="{{ order_form.guest_count.id_for_label }}"><i class="fas fa-users"></i> {{ order_form.guest_count.label }}</label>
+            {{ order_form.guest_count }}
+          </div>
+        </div>
+      </div>
+      <!-- Order Items -->
+      <div class="column order-items">
+        <h2 class="section-title"><i class="fas fa-utensils"></i> Order Items</h2>
+        {{ order_item_formset.management_form }}
+        <div class="form-fields">
+          {% for form in order_item_formset %}
+          <div class="order-item">
+            <div class="field-group">
+              <label for="{{ form.menu_item.id_for_label }}"><i class="fas fa-hamburger"></i> {{ form.menu_item.label }}</label>
+              {{ form.menu_item }}
+              <div class="menu-item-price">
+                ₱<span class="price-display">0.00</span>
+              </div>
+            </div>
+            <div class="field-group">
+              <label for="{{ form.quantity.id_for_label }}"><i class="fas fa-sort-numeric-up"></i> {{ form.quantity.label }}</label>
+              {{ form.quantity }}
+            </div>
+            <div class="field-group">
+              <label for="{{ form.notes.id_for_label }}"><i class="fas fa-sticky-note"></i> {{ form.notes.label }}</label>
+              {{ form.notes }}
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    <!-- Submit Button -->
+    <div class="form-actions">
+      <button type="submit" class="btn-submit"><i class="fas fa-paper-plane"></i> Submit Order</button>
+    </div>
+  </form>
+</div>
+<!-- Order Summary Modal -->
+<div id="orderSummaryModal" class="modal" style="display:none;">
+  <div class="modal-content">
+    <span class="close">&times;</span>
+    <h2>Order Summary</h2>
+    <div id="orderSummaryDetails"></div>
+    <button id="confirmOrderBtn" type="button" class="btn-submit" style="margin-right:10px;">Confirm</button>
+    <button id="cancelOrderBtn" type="button">Cancel</button>
+  </div>
+</div>
+
+
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const menuItemPrices = {
+      {% for menu_item in menu_items %}
+        "{{ menu_item.id }}": "{{ menu_item.price }}",
+      {% endfor %}
+    };
+
+    const orderItems = document.querySelectorAll('.order-item');
+    orderItems.forEach(orderItem => {
+      const menuItemSelect = orderItem.querySelector('select');
+      const priceDisplay = orderItem.querySelector('.price-display');
+      function updatePrice() {
+        const selectedValue = menuItemSelect.value;
+        const price = menuItemPrices[selectedValue] || "0.00";
+        priceDisplay.textContent = parseFloat(price).toFixed(2);
+      }
+      menuItemSelect.addEventListener('change', updatePrice);
+      updatePrice();
+    });
+
+    const form = document.querySelector('form');
+    const modal = document.getElementById('orderSummaryModal');
+    const summaryDetails = document.getElementById('orderSummaryDetails');
+    const closeBtn = modal.querySelector('.close');
+    const confirmBtn = document.getElementById('confirmOrderBtn');
+    const cancelBtn = document.getElementById('cancelOrderBtn');
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      let customerContact = form.querySelector('[name$="customer_contact"]').value;
+      let eventDate = form.querySelector('[name$="event_date"]').value;
+      let eventTypeElem = form.querySelector('[name$="event_type"]');
+      let eventType = eventTypeElem ? eventTypeElem.selectedOptions[0].text : '';
+      let guestCount = form.querySelector('[name$="guest_count"]').value;
+
+      let items = [];
+      orderItems.forEach(function(orderItem) {
+        let itemSelect = orderItem.querySelector('select');
+        let itemLabel = itemSelect.selectedOptions[0].text;
+        let quantity = orderItem.querySelector('[name$="quantity"]').value;
+        let notes = orderItem.querySelector('[name$="notes"]').value;
+        let price = orderItem.querySelector('.price-display').textContent;
+        if(itemSelect.value && quantity) {
+          items.push({label: itemLabel, quantity, notes, price});
+        }
+      });
+
+      let html = `
+        <p><strong>Contact:</strong> ${customerContact}</p>
+        <p><strong>Date:</strong> ${eventDate}</p>
+        <p><strong>Event Type:</strong> ${eventType}</p>
+        <p><strong>Guest Count:</strong> ${guestCount}</p>
+        <h3>Items</h3>
+        <ul>
+      `;
+      let total = 0;
+      items.forEach(function(item) {
+        let lineTotal = parseFloat(item.price) * parseInt(item.quantity || 0);
+        total += lineTotal;
+        html += `<li>${item.label}: <strong>${item.quantity}</strong> × ₱${item.price}${item.notes ? ' <em>("'+item.notes+'")</em>':''} = ₱${lineTotal.toFixed(2)}</li>`;
+      });
+      html += `</ul><p style="margin-top:10px;"><strong>Total: ₱${total.toFixed(2)}</strong></p>`;
+
+      summaryDetails.innerHTML = html;
+      modal.style.display = 'flex';
+    });
+
+    closeBtn.onclick = cancelBtn.onclick = function(){
+      modal.style.display = 'none';
+    };
+    confirmBtn.onclick = function(){
+      modal.style.display = 'none';
+      form.submit();
+    };
+    window.onclick = function(event) {
+      if (event.target === modal) modal.style.display = "none";
+    }
+});
+</script>
+{% endblock %}

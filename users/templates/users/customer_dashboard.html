@@ -1,0 +1,146 @@
+{% extends "base_for_customer.html" %}
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/customer_dashboard1.css' %}">
+
+<div class="dashboard-container">
+  <div class="dashboard-header flex-row space-between align-center">
+    <div class="profile flex-row align-center">
+      {% if profile and profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Profile" class="profile-img">
+      {% else %}
+        <img src="{% static 'images/default-profile.png' %}" alt="Default" class="profile-img">
+      {% endif %}
+      <div>
+        <h1>Hello, <span class="highlight">{{ user.get_full_name|default:user.username }}</span></h1>
+        <a href="{% url 'users:update_profile' %}" class="btn btn-small">Edit Profile</a>
+      </div>
+    </div>
+    <div>
+      <a href="{% url 'menu:customer_menu' %}" class="btn btn-primary">+ Place New Order</a>
+    </div>
+  </div>
+
+  <div class="summary-cards">
+    <div class="card">
+      <div class="icon-bg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <line x1="8" y1="6" x2="21" y2="6" />
+          <line x1="8" y1="12" x2="21" y2="12" />
+          <line x1="8" y1="18" x2="21" y2="18" />
+          <circle cx="4" cy="6" r="2" />
+          <circle cx="4" cy="12" r="2" />
+          <circle cx="4" cy="18" r="2" />
+        </svg>
+      </div>
+      <span class="card-label">Total Orders</span>
+      <span class="card-value">{{ total_orders }}</span>
+    </div>
+    <div class="card">
+      <div class="icon-bg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <polyline points="20 6 9.5 17 4 11.5"></polyline>
+        </svg>
+      </div>
+      <span class="card-label">Completed</span>
+      <span class="card-value">{{ completed_orders }}</span>
+    </div>
+    <div class="card">
+      <div class="icon-bg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <circle cx="12" cy="12" r="10"></circle>
+          <polyline points="12 6 12 12 16 14"></polyline>
+        </svg>
+      </div>
+      <span class="card-label">Pending</span>
+      <span class="card-value">{{ pending_orders }}</span>
+    </div>
+    <div class="card">
+      <div class="icon-bg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
+      </div>
+      <span class="card-label">Cancelled</span>
+      <span class="card-value">{{ cancelled_orders }}</span>
+    </div>
+    <div class="card highlight-card">
+      <div class="icon-bg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="26" height="26">
+          <circle cx="12" cy="12" r="10"></circle>
+          <path d="M8 15c1.333 2 6.667 2 8 0C16.333 13 13.667 13 12 11s-2.333-4 0-6c1.333-2 6.667-2 8 0"></path>
+        </svg>
+      </div>
+      <span class="card-label">Total Spent</span>
+      <span class="card-value">P{{ total_spent|floatformat:2 }}</span>
+    </div>
+  </div>
+
+  <!-- ---- PIE CHART SECTION ---- -->
+  <div class="dashboard-graph">
+    <h2>Order Status Distribution</h2>
+    <canvas id="ordersPieChart" style="max-width:370px; margin:auto;"></canvas>
+  </div>
+
+  <section class="orders-section">
+    <div class="section-header">
+      <h2>Your Recent Orders</h2>
+      <a href="{% url 'orders:order_list_customer' %}" class="btn-link">See All</a>
+    </div>
+    <table class="orders-table">
+      <thead>
+        <tr>
+          <th>Order #</th>
+          <th>Date</th>
+          <th>Type</th>
+          <th>Guests</th>
+          <th>Status</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders|slice:":5" %}
+        <tr class="{% if order.status == 'Cancelled' %}cancelled{% endif %}">
+          <td>{{ order.id }}</td>
+          <td>{{ order.event_date|date:"Y-m-d" }}</td>
+          <td>{{ order.event_type }}</td>
+          <td>{{ order.guest_count }}</td>
+          <td><span class="order-status status-{{ order.status|lower }}">{{ order.status }}</span></td>
+          <td><a href="{% url 'orders:order_detail' order.id %}" class="btn-link">View</a></td>
+        </tr>
+        {% empty %}
+        <tr><td colspan="6">No orders yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </section>
+</div>
+
+<!-- Chart.js and Pie Chart script -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+const statusLabels = {{ status_labels|safe }};
+const statusCounts = {{ status_counts|safe }};
+const colors = ["#17c671", "#ffc107", "#e84118"];
+const ctxPie = document.getElementById('ordersPieChart').getContext('2d');
+new Chart(ctxPie, {
+  type: 'pie',
+  data: {
+    labels: statusLabels,
+    datasets: [{
+      data: statusCounts,
+      backgroundColor: colors,
+      hoverOffset: 14,
+      borderWidth: 0
+    }]
+  },
+  options: {
+    plugins: { legend: { position: 'bottom' }},
+    responsive: true,
+    maintainAspectRatio: false,
+  }
+});
+</script>
+{% endblock %}

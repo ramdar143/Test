@@ -1,0 +1,37 @@
+<!-- users/templates/users/manage_order_items.html -->
+{% extends 'base_for_customer.html' %}
+{% block content %}
+  <div class="container">
+    <h1>Manage Items for Order #{{ order.id }}</h1>
+
+    {% if order_items %}
+      <table border="1" cellpadding="10">
+        <thead>
+          <tr>
+            <th>Menu Item</th>
+            <th>Quantity</th>
+            <th>Special Instructions</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in order_items %}
+            <tr>
+              <td>{{ item.menu_item.name }}</td>
+              <td>{{ item.quantity }}</td>
+              <td>{{ item.special_instructions }}</td>
+              <td>
+                <a href="{% url 'orders:update_order_item' item.id %}">Edit</a> |
+                <a href="{% url 'orders:cancel_order_item' item.id %}" onclick="return confirm('Are you sure you want to cancel this item?')">Cancel</a>
+              </td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <p>No items found for this order.</p>
+    {% endif %}
+
+    <a href="{% url 'users:customer_dashboard' %}">← Back to Dashboard</a>
+  </div>
+{% endblock %}

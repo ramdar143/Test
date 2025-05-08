@@ -1,0 +1,108 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container mt-5">
+  <h1>Admin ▶ Menus &amp; Categories</h1>
+  <ul class="nav nav-tabs" id="adminTabs" role="tablist">
+    <li class="nav-item">
+      <a class="nav-link active"
+         id="menus-tab"
+         data-toggle="tab"
+         href="#menus"
+         role="tab">Manage Menus</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"
+         id="category-tab"
+         data-toggle="tab"
+         href="#category"
+         role="tab">Add Category</a>
+    </li>
+    <li class="nav-item">
+      <a class="nav-link"
+         id="new-item-tab"
+         data-toggle="tab"
+         href="#new-item"
+         role="tab">Add Menu Item</a>
+    </li>
+  </ul>
+
+  <div class="tab-content mt-3" id="adminTabsContent">
+    <!-- 1) Manage Menus -->
+    <div class="tab-pane fade show active" id="menus" role="tabpanel">
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th></th>
+            <th>Name</th>
+            <th>Category</th>
+            <th>Price</th>
+            <th>Available</th>
+            <th>Allergens</th>
+          </tr>
+        </thead>
+        <tbody id="sortable">
+          {% for item in menu_items %}
+          <tr>
+            <td class="drag-handle">↕</td>
+            <td>{{ item.name }}</td>
+            <td>{{ item.category.name }}</td>
+            <td>${{ item.price }}</td>
+            <td>{{ item.is_available|yesno:"Yes,No" }}</td>
+            <td>{{ item.allergens }}</td>
+          </tr>
+          {% empty %}
+          <tr><td colspan="6">No menu items yet.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- 2) Add Category -->
+    <div class="tab-pane fade" id="category" role="tabpanel">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ cat_form.management_form }}    {# not strictly needed for ModelForm but harmless #}
+        {% for field in cat_form %}
+          <div class="form-group">
+            {{ field.label_tag }} {{ field }}
+            {% if field.errors %}<div class="text-danger">{{ field.errors }}</div>{% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" name="cat-submit" class="btn btn-primary">
+          Add Category
+        </button>
+      </form>
+    </div>
+
+    <!-- 3) Add Menu Item -->
+    <div class="tab-pane fade" id="new-item" role="tabpanel">
+      <form method="post" novalidate>
+        {% csrf_token %}
+        {{ item_form.management_form }}
+        {% for field in item_form %}
+          <div class="form-group">
+            {{ field.label_tag }} {{ field }}
+            {% if field.errors %}<div class="text-danger">{{ field.errors }}</div>{% endif %}
+          </div>
+        {% endfor %}
+        <button type="submit" name="item-submit" class="btn btn-success">
+          Create Menu Item
+        </button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{# jQuery UI sortable for drag‐to‐reorder (optional) #}
+<script src="https://code.jquery.com/ui/1.13.2/jquery-ui.min.js"></script>
+<script>
+  $('#sortable').sortable({
+    handle: '.drag-handle',
+    update: function(evt, ui) {
+      // You could POST the new order via AJAX here
+    }
+  });
+</script>
+{% endblock %}

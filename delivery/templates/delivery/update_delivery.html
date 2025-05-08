@@ -1,0 +1,14 @@
+<!-- templates/delivery/update_delivery.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Update Delivery Status</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Delivery</button>
+  </form>
+
+  <a href="{% url 'order_detail' delivery.order.pk %}">Back to Order Details</a>
+{% endblock %}

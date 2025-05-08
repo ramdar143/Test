@@ -1,0 +1,17 @@
+<!-- payments/payment_page.html -->
+
+{% extends 'base_for_customer.html' %}
+
+{% block content %}
+  <h1>Payment for Order {{ invoice.order.id }}</h1>
+  <p>Amount: ${{ invoice.amount }}</p>
+
+  <!-- Example: Payment form (you can replace this with your actual payment gateway integration) -->
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Complete Payment</button>
+  </form>
+
+  <p>Invoice Status: {{ invoice.status }}</p>
+{% endblock %}

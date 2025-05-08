@@ -1,0 +1,63 @@
+{% extends 'base_for_customer.html' %}
+{% load static %}
+
+{% block content %}
+
+<link rel="stylesheet" href="{% static 'css/paypal_payment.css' %}">
+
+<div class="paypal-payment-container">
+
+  <!-- Logo and Amount Section -->
+  <div class="paypal-logo-section">
+    <img src="{% static 'images/paypal-logo.png' %}" alt="PayPal" class="paypal-logo">
+    <span class="paypal-amount">
+      P{{ order_total }} {{ order_currency }}
+    </span>
+  </div>
+
+  <!-- Title and Subtitle -->
+  <h2 class="paypal-title">Pay with PayPal</h2>
+  <p class="paypal-subtitle">
+    Enter your email or mobile number to get started.
+  </p>
+  
+  <!-- Error Display -->
+  {% if paypal_form.errors %}
+    <div class="paypal-error-message">
+      {% for field in paypal_form %}
+        {% for error in field.errors %}
+          <p>{{ error }}</p>
+        {% endfor %}
+      {% endfor %}
+      {% for error in paypal_form.non_field_errors %}
+        <p>{{ error }}</p>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Payment Form -->
+  <form method="POST" class="paypal-form">
+    {% csrf_token %}
+    <div class="paypal-input-wrap">
+      {{ paypal_form.email_or_mobile.label_tag }}
+      {{ paypal_form.email_or_mobile }}
+    </div>
+    
+    <a href="#" class="paypal-forgot-link">Forgot email?</a>
+    
+    <button type="submit" class="paypal-primary-btn">Next</button>
+    
+    <div class="paypal-or-divider">or</div>
+    <button type="button" class="paypal-secondary-btn">Pay with Debit or Credit Card</button>
+  </form>
+
+  <a href="#" class="paypal-cancel-link">
+    Cancel and return to {{ order.customer_email|default:'your email' }}
+  </a>
+  
+  <div class="paypal-lang-options">
+    <span>English</span> | <span>Français</span> | <span>Español</span> | <span>中文</span>
+  </div>
+</div>
+
+{% endblock %}

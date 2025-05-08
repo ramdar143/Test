@@ -1,0 +1,39 @@
+<!-- templates/base_generic.html -->
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering System</title>
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <!-- Header Section -->
+    <header>
+        <nav class="navbar">
+            <ul>
+                <li><a href="/">Home</a></li>
+                {% comment %} <li><a href="{% url 'menu_list' %}">Menu</a></li> {% endcomment %}
+                <li><a href="{% url 'orders:create_order' %}">Create Order</a></li>
+                <li><a href="{% url 'orders:order_list' %}">Orders</a></li>
+                {% if user.is_authenticated %}
+                    <li><a href="{% url 'users:logout' %}">Logout</a></li>
+                {% else %}
+                    <li><a href="{% url 'users:login' %}">Login</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <!-- Main Content Section -->
+    <div class="main-content">
+        {% block content %}
+        {% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Central Eatery Catering & Order Management System</p>
+    </footer>
+</body>
+</html>

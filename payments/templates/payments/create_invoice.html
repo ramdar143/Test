@@ -1,0 +1,14 @@
+<!-- templates/payments/create_invoice.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Create Invoice for Order {{ order.customer_name }}</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Invoice</button>
+  </form>
+
+  <a href="{% url 'order_detail' order.pk %}">Back to Order Details</a>
+{% endblock %}

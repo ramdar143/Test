@@ -1,0 +1,16 @@
+<!-- templates/payments/confirm_payment.html -->
+<h1>Payment for Order {{ invoice.order.id }}</h1>
+<p>Amount Due: ₱{{ invoice.amount }}</p>
+<p>Status: {{ invoice.get_status_display }}</p>
+
+<form method="POST">
+  {% csrf_token %}
+  <div>
+    <label for="method">Payment Method</label>
+    <select name="method" id="method">
+      <option value="Credit Card">Credit Card</option>
+      <option value="Bank Transfer">Bank Transfer</option>
+    </select>
+  </div>
+  <button type="submit">Pay Now</button>
+</form>

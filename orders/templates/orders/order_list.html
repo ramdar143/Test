@@ -1,0 +1,187 @@
+{% extends "base_for_admin.html" %}
+{% load static %}
+
+{% block title %}Order List{% endblock %}
+
+{% block extra_head %}
+<style>
+.order-list-container {
+    max-width: 1200px;
+    margin: 40px auto 0 auto;
+}
+
+.filter-section {
+    background: #f9fbfc;
+    border-radius: 1.1rem;
+    padding: 18px 28px 12px 28px;
+    box-shadow: 0 2px 16px #1c2f5233;
+    margin-bottom: 24px;
+}
+
+.orders-table th, .orders-table td {
+    vertical-align: middle !important;
+}
+
+td[colspan="6"] {
+    color: #6b7c93;
+    text-align: center;
+    font-size: 1.15rem;
+    padding: 48px 0;
+}
+.btn-link, .btn-link:visited {
+    text-decoration: none !important;
+    border: none;
+    background: none;
+    color: #1976d2;
+    font-weight: 500;
+    margin-right: 3px;
+}
+.btn-link.confirm {
+    color: #28a745;
+}
+.btn-link.delete {
+    color: #e53935;
+}
+.btn-link i {
+    font-size: 1.1em;
+    margin-right: 2px;
+}
+.badge-status {
+    font-size: 1em;
+    padding: 0.48em 1.1em;
+}
+.badge-status.pending { background: #ffc107; color: #232323;}
+.badge-status.inprogress { background: #0dcaf0; color: #232323;}
+.badge-status.completed { background: #32b768;}
+.badge-status.cancelled { background: #e53935;}
+
+.badge-pay.not-paid { background: #ffcdd2; color: #d32f2f;}
+.badge-pay.paid { background: #c8e6c9; color: #388e3c;}
+.badge-pay.refunded { background: #fff9c4; color: #ff9800;}
+.badge-pay.disputed { background: #bbdefb; color: #1565c0;}
+/* Responsive tweaks */
+@media (max-width: 850px) {
+    .order-list-container { padding: 0 8px; }
+    .filter-section { padding: 14px 8px 8px 8px; }
+    .orders-table th, .orders-table td { font-size: 0.95em; }
+}
+.empty-state-img { width: 178px; opacity: 0.97; margin: 30px 0 13px 0; }
+.empty-state-msg { font-size: 1.18em; color: #69798f; }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="order-list-container">
+
+  <h2 class="mb-3 text-center fw-bold" style="letter-spacing:.02em;">Order List</h2>
+
+  <div class="filter-section d-flex flex-wrap align-items-end gap-3 mb-4">
+    <form method="get" class="row g-2 w-100">
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label" for="status">Filter by Status:</label>
+        <select name="status" id="status" class="form-select">
+          <option value="">All</option>
+          <option value="Pending" {% if request.GET.status == 'Pending' %}selected{% endif %}>Pending</option>
+          <option value="In Progress" {% if request.GET.status == 'In Progress' %}selected{% endif %}>In Progress</option>
+          <option value="Completed" {% if request.GET.status == 'Completed' %}selected{% endif %}>Completed</option>
+          <option value="Cancelled" {% if request.GET.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+        </select>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <label class="form-label" for="payment_status">Filter by Payment:</label>
+        <select name="payment_status" id="payment_status" class="form-select">
+          <option value="">All</option>
+          <option value="Not Paid" {% if request.GET.payment_status == 'Not Paid' %}selected{% endif %}>Not Paid</option>
+          <option value="Paid" {% if request.GET.payment_status == 'Paid' %}selected{% endif %}>Paid</option>
+          <option value="Refunded" {% if request.GET.payment_status == 'Refunded' %}selected{% endif %}>Refunded</option>
+          <option value="Disputed" {% if request.GET.payment_status == 'Disputed' %}selected{% endif %}>Disputed</option>
+        </select>
+      </div>
+      <div class="col-md-2 col-sm-12 d-flex align-items-end">
+        <button type="submit" class="btn btn-primary px-4 py-2 fw-semibold shadow-sm"><i class="bi bi-filter-circle"></i> Filter</button>
+      </div>
+    </form>
+  </div>
+
+  <div class="orders-section">
+    <table class="table table-hover orders-table align-middle">
+      <thead>
+        <tr class="align-middle">
+          <th>Customer</th>
+          <th>Status</th>
+          <th>Payment</th>
+          <th>Event Type</th>
+          <th>Guests</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for order in orders %}
+          <tr>
+            <td>
+              <a href="{% url 'orders:order_detail' order.pk %}" class="fw-medium">
+                <i class="bi bi-person"></i> {{ order.customer.username }}
+              </a>
+            </td>
+            <td>
+              {% with order.status|lower as st %}
+                <span class="badge badge-status {% if st == 'pending' %}pending{% elif st == 'in progress' %}inprogress{% elif st == 'completed' %}completed{% elif st == 'cancelled' %}cancelled{% endif %}">
+                  {{ order.status }}
+                </span>
+              {% endwith %}
+            </td>
+            <td>
+              {% with order.payment_status|slugify as pay %}
+                <span class="badge badge-pay {% if pay == 'not-paid' %}not-paid{% elif pay == 'paid' %}paid{% elif pay == 'refunded' %}refunded{% elif pay == 'disputed' %}disputed{% endif %}">
+                  {{ order.payment_status }}
+                </span>
+              {% endwith %}
+            </td>
+            <td>{{ order.event_type }}</td>
+            <td>{{ order.guest_count|default:'—' }} guests</td>
+            <td>
+              <a href="{% url 'orders:order_detail' order.pk %}" class="btn-link" data-bs-toggle="tooltip" data-bs-title="Order Details">
+                <i class="bi bi-eye"></i> View
+              </a>
+              {% if order.status == "Pending" %}
+                <form action="{% url 'orders:confirm_order' order.pk %}" method="post" style="display:inline;">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-link confirm" data-bs-toggle="tooltip" data-bs-title="Confirm Order">
+                    <i class="bi bi-check-circle"></i> Confirm
+                  </button>
+                </form>
+                <form action="{% url 'orders:delete_order' order.pk %}" method="post" style="display:inline;" onsubmit="return confirm('Are you sure you want to delete this order?');">
+                  {% csrf_token %}
+                  <button type="submit" class="btn-link delete" data-bs-toggle="tooltip" data-bs-title="Delete Order">
+                    <i class="bi bi-trash"></i> Delete
+                  </button>
+                </form>
+              {% endif %}
+            </td>
+          </tr>
+        {% empty %}
+          <tr>
+            <td colspan="6">
+              <img src="{% static 'img/empty-tasks.svg' %}" alt="No Orders" class="empty-state-img">
+              <div class="empty-state-msg">No orders available. Try changing filter options.</div>
+            </td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'));
+    if (window.bootstrap) {
+        tooltipTriggerList.forEach(function (el) {
+            new bootstrap.Tooltip(el);
+        });
+    }
+});
+</script>
+{% endblock %}

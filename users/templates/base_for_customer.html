@@ -1,0 +1,73 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering System</title>
+    <link rel="stylesheet" href="{% static 'css/navigations2.css' %}">
+    <!-- Enhance with Google Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+
+    <!-- Bootstrap 5 CSS -->
+    <style>
+        /* Optional extra CSS here */
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li>
+                    <a href="{% url 'users:customer_dashboard' %}" class="{% if request.resolver_match.url_name == 'customer_dashboard' %}active{% endif %}">
+                        <i class="fas fa-tachometer-alt"></i> <span>Dashboard</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'menu:customer_menu' %}" class="{% if request.resolver_match.url_name == 'customer_menu' %}active{% endif %}">
+                        <i class="fas fa-utensils"></i> <span>Menus</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="{% url 'orders:order_list_customer' %}" class="{% if request.resolver_match.url_name == 'order_list_customer' %}active{% endif %}">
+                        <i class="fas fa-shopping-cart"></i> <span>Orders</span>
+                    </a>
+                </li>
+                <!-- Add Invoice and Payment History Links (Uncomment and customize as needed) -->
+            
+                {% if user.is_authenticated %}
+                <li>
+                    <a href="{% url 'users:logout' %}" class="{% if request.resolver_match.url_name == 'logout' %}active{% endif %}">
+                        <i class="fas fa-sign-out-alt"></i> <span>Logout</span>
+                    </a>
+                </li>
+                {% else %}
+                <li>
+                    <a href="{% url 'users:login' %}" class="{% if request.resolver_match.url_name == 'login' %}active{% endif %}">
+                        <i class="fas fa-sign-in-alt"></i> <span>Login</span>
+                    </a>
+                </li>
+                {% endif %}
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Main Content Section -->
+    <div class="content-wrapper">
+        <div class="main-content">
+            {% block content %}
+            <!-- Your page content goes here -->
+            {% endblock %}
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Central Eatery Catering &amp; Order Management System</p>
+    </footer>
+</body>
+</html>

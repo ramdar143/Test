@@ -1,0 +1,14 @@
+<!-- payments/templates/payments/payment_form.html -->
+{% extends 'base_for_customer.html' %}
+
+{% block content %}
+  <h2>Payment for Order #{{ invoice.order.id }}</h2>
+  <p>Amount: ${{ invoice.amount }}</p>
+  
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn-primary">Proceed with Payment</button>
+  </form>
+{% endblock %}

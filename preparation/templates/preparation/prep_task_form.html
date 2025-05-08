@@ -1,0 +1,14 @@
+{% extends 'base_for_kitchenstaff.html' %}
+
+{% block title %}Update Task Status{% endblock %}
+
+{% block content %}
+<h2>Update Task Status for Task: {{ task.name }}</h2>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Save</button>
+</form>
+
+{% endblock %}

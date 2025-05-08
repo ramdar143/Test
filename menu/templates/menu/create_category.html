@@ -1,0 +1,11 @@
+<!-- templates/menu/create_category.html -->
+{% extends 'base_for_admin.html' %}
+
+{% block content %}
+  <h2>Create Category</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Create Category</button>
+  </form>
+{% endblock %}

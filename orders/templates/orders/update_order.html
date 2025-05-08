@@ -1,0 +1,11 @@
+<!-- templates/orders/update_order.html -->
+{% extends 'base_for_admin.html' %}
+
+{% block content %}
+  <h2>Update Order</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Update Order</button>
+  </form>
+{% endblock %}

@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Catering System</title>
+    <link rel="stylesheet" href="/static/css/navigations1.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        body {
+            background: #10172B;
+            color: #e0f2ff;
+            font-family: 'Inter', Arial, sans-serif; /* Using Google Font */
+            margin: 0;
+        }
+
+        .my-orders-wrapper {
+            max-width: 1100px;
+            margin: 0 auto 46px auto;
+            padding: 28px 8px;
+        }
+
+        .my-orders-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #246afe;
+            margin-bottom: 30px;
+            letter-spacing: 0.04em;
+            text-align: center;
+        }
+
+        .my-orders-table-scroll {
+            background: #14223B;
+            border-radius: 16px;
+            overflow-x: auto;
+            box-shadow: 0 2px 18px rgba(36, 106, 254, 0.11);
+            padding: 18px 16px 11px 16px;
+        }
+
+        .my-orders-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            background: none;
+        }
+
+        /* Table Headings */
+        .my-orders-thead .my-orders-th {
+            background: #162447;
+            color: #67aefc;
+            font-size: 1.09rem;
+            font-weight: 600;
+            letter-spacing: 0.03em;
+            padding: 13px 8px;
+            text-align: left;
+            border-bottom: 2.5px solid #294bf5;
+        }
+
+        .my-orders-tbody .my-orders-tr {
+            border-bottom: 1.7px solid #203567;
+        }
+
+        .my-orders-tbody .my-orders-td {
+            background: #192a4b;
+            color: #e0f2ff;
+            font-size: 1.05rem;
+            padding: 14px 8px;
+        }
+
+        /* Status & Payment badges */
+        .my-status-pill, .my-pay-pill {
+            display: inline-block;
+            padding: 0.29em 0.89em;
+            border-radius: 14px;
+            font-weight: 600;
+            font-size: .93em;
+            letter-spacing: 0.03em;
+            background: #222f44;
+        }
+
+        .my-status-pending { color: #ffb634; background: #232b37; }
+        .my-status-completed { color: #47e18b; background: #162a46; }
+        .my-pay-paid { color: #47e18b; background: #162a46; }
+        .my-pay-not-paid { color: #fd5f57; background: #2b1a1a; }
+
+        .my-view-btn {
+            display: inline-block;
+            background: linear-gradient(90deg, #246afe 0%, #1d90ff 100%);
+            color: #fff !important;
+            border: none;
+            border-radius: 7px;
+            padding: 0.46em 1.3em;
+            font-weight: 700;
+            font-size: 1.0rem;
+            text-align: center;
+            text-decoration: none !important;
+            transition: background .13s, transform .13s, box-shadow .12s;
+            cursor: pointer;
+        }
+
+        .my-view-btn:hover, .my-view-btn:focus {
+            background: linear-gradient(90deg, #1d50c6 0%, #0e83ff 100%);
+            color: #fff;
+            transform: translateY(-2px) scale(1.034);
+            box-shadow: 0 6px 18px rgba(36, 106, 254, 0.13);
+        }
+
+        .my-no-orders {
+            color: #b4c7e0;
+            padding: 3em 1em;
+            text-align: center;
+        }
+
+        /* Responsive Styles */
+        @media (max-width: 900px) {
+            .my-orders-wrapper {
+                max-width: 98vw;
+                padding: 16px 2vw;
+            }
+
+            .my-orders-title {
+                font-size: 1.22rem;
+                margin-bottom: 20px;
+            }
+        }
+
+        @media (max-width: 600px) {
+            .my-orders-table thead {
+                display: none;
+            }
+
+            .my-orders-table, .my-orders-table tbody, .my-orders-table tr, .my-orders-table td {
+                display: block;
+                width: 100%;
+            }
+
+            .my-orders-table tr {
+                background: #263e72;
+                margin-bottom: 12px;
+                border-radius: 11px;
+                box-shadow: 0 2px 9px #12376387;
+                padding-bottom: 7px;
+                border-bottom: 0;
+            }
+
+            .my-orders-table td {
+                border: none;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0.57em 1em;
+                font-size: 1rem;
+                background: none;
+                color: #e0f2ff;
+            }
+
+            .my-orders-table td::before {
+                content: attr(data-label);
+                color: #7dbdff;
+                font-weight: 500;
+                flex-shrink: 0;
+                margin-right: 10px;
+                min-width: 110px;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar Navigation -->
+    <div class="sidebar">
+        <nav>
+            <ul>
+                <li><a href="/users/customer-dashboard/" class=""><i class="fas fa-tachometer-alt"></i><span>Dashboard</span></a></li>
+                <li><a href="/menu/customer_menu/" class=""><i class="fas fa-utensils"></i><span>Menus</span></a></li>
+                <li><a href="/orders/my-orders/" class="active"><i class="fas fa-shopping-cart"></i><span>Orders</span></a></li>
+                <li><a href="/users/logout/" class=""><i class="fas fa-sign-out-alt"></i><span>Logout</span></a></li>
+            </ul>
+        </nav>
+    </div>
+    
+    <!-- Main Content Section -->
+    <div class="content-wrapper">
+        <div class="main-content">
+            <div class="my-orders-wrapper">
+                <h2 class="my-orders-title">My Orders</h2>
+                <div class="my-orders-table-scroll">
+                    <table class="my-orders-table">
+                        <thead class="my-orders-thead">
+                            <tr>
+                                <th class="my-orders-th">ID</th>
+                                <th class="my-orders-th">Date</th>
+                                <th class="my-orders-th">Status</th>
+                                <th class="my-orders-th">Payment</th>
+                                <th class="my-orders-th">Total</th>
+                                <th class="my-orders-th">Details</th>
+                            </tr>
+                        </thead>
+                        <tbody class="my-orders-tbody">
+                            <tr class="my-orders-tr">
+                                <td class="my-orders-td">#44</td>
+                                <td class="my-orders-td">2025-05-15</td>
+                                <td class="my-orders-td"><span class="my-status-pill my-status-pending">Pending</span></td>
+                                <td class="my-orders-td"><span class="my-pay-pill my-pay-not-paid">Not Paid</span></td>
+                                <td class="my-orders-td">₱50.00</td>
+                                <td class="my-orders-td"><a href="/orders/order/44/" class="my-view-btn">View</a></td>
+                            </tr>
+                            <tr class="my-orders-tr">
+                                <td class="my-orders-td">#43</td>
+                                <td class="my-orders-td">2025-05-13</td>
+                                <td class="my-orders-td"><span class="my-status-pill my-status-pending">Pending</span></td>
+                                <td class="my-orders-td"><span class="my-pay-pill my-pay-paid">Paid</span></td>
+                                <td class="my-orders-td">₱250.00</td>
+                                <td class="my-orders-td"><a href="/orders/order/43/" class="my-view-btn">View</a></td>
+                            </tr>
+                            <tr class="my-orders-tr">
+                                <td class="my-orders-td">#42</td>
+                                <td class="my-orders-td">2025-05-05</td>
+                                <td class="my-orders-td"><span class="my-status-pill my-status-completed">Completed</span></td>
+                                <td class="my-orders-td"><span class="my-pay-pill my-pay-paid">Paid</span></td>
+                                <td class="my-orders-td">₱500.00</td>
+                                <td class="my-orders-td"><a href="/orders/order/42/" class="my-view-btn">View</a></td>
+                            </tr>
+                            <tr class="my-orders-tr">
+                                <td class="my-orders-td">#41</td>
+                                <td class="my-orders-td">2025-04-29</td>
+                                <td class="my-orders-td"><span class="my-status-pill my-status-completed">Completed</span></td>
+                                <td class="my-orders-td"><span class="my-pay-pill my-pay-paid">Paid</span></td>
+                                <td class="my-orders-td">₱25,000.00</td>
+                                <td class="my-orders-td"><a href="/orders/order/41/" class="my-view-btn">View</a></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                {% if orders|length == 0 %}
+                <p class="my-no-orders">You have no orders yet.</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer Section -->
+    <footer>
+        <p>&copy; 2025 Central Eatery Catering & Order Management System</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,25 @@
+{% extends 'base_generic.html' %}
+
+{% block content %}
+    <h1>Invoice #{{ invoice.pk }}</h1>
+    <p>Status: {{ invoice.status }}</p>
+    <p>Amount: {{ invoice.amount }}</p>
+
+    {% if invoice.status == 'Unpaid' %}
+        <h2>Make a Payment</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Pay</button>
+        </form>
+    {% else %}
+        <p>This invoice is already paid.</p>
+    {% endif %}
+    
+    <h2>Payments:</h2>
+    <ul>
+        {% for payment in payments %}
+            <li>Amount Paid: {{ payment.amount_paid }} - Date: {{ payment.payment_date }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

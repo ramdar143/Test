@@ -1,0 +1,104 @@
+{% extends 'base_for_admin.html' %}
+{% load static %}
+
+{% block content %}
+<head>
+  <style>
+    /* Scroll functionality for categories */
+    .category-list-container {
+      height: 300px; /* Fixed height, adjust as necessary */
+      overflow-y: auto; /* Always show scroll when content exceeds height */
+      border: 1px solid #ddd; /* Optional: add border to make it more noticeable */
+    }
+
+    /* Flexbox layout for headings and buttons */
+    .heading-container {
+      display: flex;
+      justify-content: space-between; /* Space between heading and button */
+      align-items: center;
+    }
+
+    .add-category-btn,
+    .add-menu-item-btn {
+      margin-left: auto; /* Push the button to the right */
+    }
+  </style>
+</head>
+
+<div class="container my-4">
+
+  <div class="heading-container mb-3">
+    <h2 class="text-secondary">📂 Categories</h2>
+    <a href="{% url 'menu:create_category' %}" class="btn btn-secondary">+ Add Category</a>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <div class="category-list-container">
+        {% if categories %}
+          <ul class="list-group">
+            {% for category in categories %}
+              <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                  <strong>{{ category.name }}</strong> - {{ category.description }}
+                </div>
+                <form method="post" action="{% url 'menu:manage_menu' %}" class="m-0">
+                  {% csrf_token %}
+                  <button type="submit" name="delete_category" value="{{ category.id }}"
+                          class="btn btn-sm btn-outline-danger"
+                          onclick="return confirm('Delete this category?')">Delete</button>
+                </form>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="text-muted">No categories found.</p>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+
+  <div class="heading-container mb-4">
+    <h2 class="text-primary">📋 Menu Items</h2>
+    <a href="{% url 'menu:create_menu_item' %}" class="btn btn-success">+ Add Menu Item</a>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      {% if items %}
+        <table class="table table-hover">
+          <thead class="table-light">
+            <tr>
+              <th>Name</th>
+              <th>Price</th>
+              <th>Category</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for item in items %}
+              <tr>
+                <td>{{ item.name }}</td>
+                <td>${{ item.price }}</td>
+                <td>{{ item.category.name }}</td>
+                <td>
+                  <a href="{% url 'menu:update_menu_item' item.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                  <form method="post" action="{% url 'menu:manage_menu' %}" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" name="delete_item" value="{{ item.id }}"
+                            class="btn btn-sm btn-outline-danger"
+                            onclick="return confirm('Delete this item?')">Delete</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% else %}
+        <p class="text-muted">No menu items available.</p>
+      {% endif %}
+    </div>
+  </div>
+
+</div>
+{% endblock %}

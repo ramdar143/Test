@@ -1,0 +1,74 @@
+/* General Styles */
+.card-title {
+    font-size: 1.2rem;
+    font-weight: bold;
+}
+
+.card-text {
+    font-size: 1rem;
+    color: #555;
+}
+
+.card-body {
+    padding: 1.25rem;
+}
+
+.card {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+}
+
+.card .badge {
+    font-size: 0.875rem;
+    padding: 0.5rem;
+}
+
+.alert {
+    font-size: 1.1rem;
+    padding: 1rem;
+}
+
+/* Button Styles */
+.btn {
+    font-size: 0.875rem;
+    padding: 0.5rem 1rem;
+    border-radius: 5px;
+}
+
+.btn i {
+    margin-right: 5px;
+}
+
+.btn-warning {
+    background-color: #f0ad4e;
+}
+
+/* Styling for Empty State */
+.alert-info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+}
+
+/* Table Styles */
+.table-responsive {
+    margin-top: 20px;
+}
+
+.table th, .table td {
+    vertical-align: middle;
+}
+
+.table-light {
+    background-color: #f8f9fa;
+}
+
+/* Delete Button Styles */
+.delete-btn {
+    background-color: #dc3545 !important; /* Bootstrap's standard red color */
+    border-color: #dc3545 !important; /* Ensures border is also red */
+}
+
+.delete-btn:hover {
+    background-color: #c82333 !important; /* Darker red for hover effect */
+    border-color: #bd2130 !important; /* Darker red for hover border */
+}

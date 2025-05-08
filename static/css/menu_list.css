@@ -1,0 +1,5 @@
+/* Add scroll to the category list */
+.category-list-container {
+    max-height: 300px; /* You can adjust this height as needed */
+    overflow-y: scroll;
+  }

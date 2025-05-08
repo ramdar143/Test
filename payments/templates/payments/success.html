@@ -1,0 +1,14 @@
+<!-- payments/templates/payments/success.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Payment Success</title>
+</head>
+<body>
+    <h1>Payment Success!</h1>
+    <p>Your payment of ${{ payment.amount }} was successfully processed.</p>
+    <p>Transaction ID: {{ payment.transaction_id }}</p>
+    <p>Status: {{ payment.status }}</p>
+</body>
+</html>

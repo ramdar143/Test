@@ -1,0 +1,15 @@
+<!-- orders/templates/orders/update_order_item.html -->
+{% extends 'base_for_customer.html' %}
+{% block content %}
+  <div class="container">
+    <h1>Edit Order Item</h1>
+
+    <form method="POST">
+      {% csrf_token %}
+      {{ form.as_p }}
+      <button type="submit">Update Item</button>
+    </form>
+
+    <a href="{% url 'users:manage_order_items' order_item.order.id %}">← Back to Manage Items</a>
+  </div>
+{% endblock %}

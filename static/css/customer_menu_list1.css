@@ -1,0 +1,205 @@
+body {
+    background: #101720;
+    font-family: 'Segoe UI', Arial, sans-serif;
+    color: #e0f2ff;
+    margin: 0;
+}
+
+/* Menu Title */
+.menu-title {
+    font-size: 2rem;
+    font-weight: 700;
+    text-align: center;
+    margin: 2rem 0 1.2rem 0;
+    color: #246afe;
+    letter-spacing: 0.04em;
+}
+
+/* Grid Layout */
+.menu-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(315px, 1fr));
+    gap: 2rem;
+    max-width: 1240px;
+    margin: 0 auto 3rem auto;
+    padding: 0 16px;
+}
+
+/* Card Skeleton */
+.menu-card {
+    background: #202a38;
+    border-radius: 16px;
+    box-shadow: 0 6px 32px rgba(36, 106, 254, 0.10);
+    display: flex;
+    flex-direction: column;
+    min-height: 440px;
+    overflow: hidden;
+    transition: 
+        box-shadow 0.18s, 
+        border-color 0.17s,
+        transform 0.13s;
+    border: 1.25px solid #233255;
+    position: relative;
+}
+.menu-card:hover {
+    border-color: #1d90ff;
+    box-shadow: 0 16px 32px rgba(36,106,254,0.18), 0 1.5px 8px #202a38;
+    transform: translateY(-3px) scale(1.022);
+}
+
+/* Card Image Holder */
+.menu-card-imgwrap {
+    background: #242f43;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 190px;
+    min-height: 190px;
+    width: 100%;
+    border-bottom: 1.5px solid #233255;
+}
+.menu-image {
+    max-width: 82%;
+    max-height: 165px;
+    border-radius: 10px;
+    object-fit: contain;
+    box-shadow: 0 2px 10px rgba(30, 40, 92, 0.09);
+}
+
+/* Card Contents */
+.menu-card-content {
+    flex: 1 1 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 20px 18px 10px 18px;
+    width: 100%;
+}
+
+.menu-item-name {
+    font-size: 1.17rem;
+    font-weight: 600;
+    color: #eaf2ff;
+    margin-bottom: 0.42em;
+    /* comfortably space above desc */
+    text-align: left;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.menu-item-desc {
+    font-size: 0.97rem;
+    color: #c1cfdd;
+    min-height: 2.2em;
+    max-height: 2.5em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-bottom: 0.8em;
+    width: 100%;
+    line-height: 1.34em;
+    text-align: left;
+}
+
+/* Card Footer */
+.menu-card-footer {
+    display: flex;
+    gap: 0.65rem;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 18px 17px 18px;
+    width: 100%;
+    margin-top: auto;
+}
+
+/* Price Pill */
+.price-pill {
+    background: #172f4e;
+    color: #38a7ff;
+    font-weight: 800;
+    font-size: 1.13rem;
+    padding: 0.36em 1em;
+    border-radius: 2em;
+    border: 1.5px solid #294bf5;
+    letter-spacing: 0.01em;
+    box-shadow: 0 2px 7px rgba(36,106,254,0.09) inset;
+    display: inline-block;
+}
+
+/* Order Button */
+.order-btn {
+    flex: 1 1 auto;
+    background: linear-gradient(90deg, #246afe 0%, #1d90ff 100%);
+    color: #fff !important;
+    border: none;
+    border-radius: 7px;
+    padding: 0.52em 0;
+    font-weight: 700;
+    font-size: 1.08rem;
+    text-align: center;
+    text-decoration: none !important;
+    transition: 
+        background .16s, 
+        transform .14s, 
+        box-shadow .14s;
+    box-shadow: 0 2px 12px rgba(36,106,254,0.09);
+    margin-left: 1em;
+    letter-spacing: 0.03em;
+    cursor: pointer;
+    outline: none;
+    min-width: 100px;
+    display: inline-block;
+}
+.order-btn:hover,
+.order-btn:focus {
+    background: linear-gradient(90deg, #1d50c6 0%, #0e83ff 100%);
+    color: #fff;
+    transform: translateY(-2px) scale(1.039);
+    box-shadow: 0 6px 20px rgba(36,106,254,0.16);
+}
+.order-btn, .order-btn:visited, .order-btn:active {
+    text-decoration: none !important;
+}
+
+.no-items {
+    text-align: center;
+    color: #888a95;
+    font-size: 1.15rem;
+    padding: 2.5em 1em;
+    grid-column: 1 / -1;
+}
+
+@media (max-width: 1050px) {
+    .menu-grid {
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 1.2rem;
+    }
+}
+@media (max-width: 700px) {
+    .menu-grid {
+        grid-template-columns: 1fr;
+        gap: 0.9rem;
+    }
+    .menu-title {
+        font-size: 1.15rem;
+        margin-top: 1.2rem;
+        margin-bottom: 1rem;
+    }
+    .menu-card-footer {
+        padding-left: 10px;
+        padding-right: 10px;
+        padding-bottom: 11px;
+    }
+    .menu-card-content {
+        padding: 13px 10px 4px 10px;
+    }
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    background: #212d39;
+}
+::-webkit-scrollbar-thumb {
+    background: #212a37;
+    border-radius: 9px;
+}

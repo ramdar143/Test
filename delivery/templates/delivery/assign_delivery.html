@@ -1,0 +1,14 @@
+<!-- templates/delivery/assign_delivery.html -->
+{% extends 'base_generic.html' %}
+
+{% block content %}
+  <h2>Assign Delivery for Order {{ order.customer_name }}</h2>
+
+  <form method="POST">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Assign Delivery</button>
+  </form>
+
+  <a href="{% url 'order_detail' order.pk %}">Back to Order Details</a>
+{% endblock %}

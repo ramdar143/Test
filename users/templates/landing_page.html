@@ -1,0 +1,61 @@
+{% load static %}
+
+{% block content %}
+<link rel="stylesheet" href="{% static 'css/landing1.css' %}">
+
+<!-- Navbar -->
+<header class="navbar">
+    <div class="container">
+      <div class="logo">
+        <img src="{% static 'images/logo.png' %}" alt="Catering Logo">
+      </div>
+      <nav class="nav-links">
+        <ul class="left-links">
+          <li><a href="{% url 'users:landing_page' %}">Home</a></li>
+        </ul>
+        <ul class="right-links">
+          <li><a href="{% url 'users:login' %}">Login</a></li> 
+          <li><a href="{% url 'users:customer_register' %}">Register</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+  
+
+<!-- Hero Section -->
+<section class="hero">
+  <div class="container">
+    <h1>We Serve <span class="highlight">Quality</span> Foods</h1>
+    <p>The readable content of a page when looking at its layout and design.</p>
+    <div class="hero-buttons">
+      <a href="{% url 'users:login' %}" class="btn btn-green">Shop Now</a>
+      <a href="#" class="btn btn-outline">View More</a>
+    </div>
+  </div>
+</section>
+
+<!-- Video Recipes Section -->
+<section class="video-recipes">
+  <div class="container">
+    <h2>Check Our <span class="highlight">Video Recipes</span></h2>
+    <div class="video-grid">
+      <div class="video-card">
+        <img src="{% static 'images/video1.jpg' %}" alt="Hukka Noodles">
+        <h3>Hukka Noodles</h3>
+        <p>James Colins</p>
+        <a href="#">Click & Watch</a>
+      </div>
+      <div class="video-card">
+        <img src="{% static 'images/video2.jpg' %}" alt="Veg Noodles">
+        <h3>Veg Noodles</h3>
+        <p>James Colins</p>
+        <a href="#">Click & Watch</a>
+      </div>
+      <!-- Add more cards as needed -->
+    </div>
+    <div class="view-all">
+      <a href="#" class="btn btn-blue">View all Videos</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
