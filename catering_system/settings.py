@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-13$ck(9^9#3&yx38m381-9u9*^prs4lx8o!&$he2q!4v=#04%f
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOST = ['.vercel.app']
 
 
 # Application definition
@@ -139,4 +139,3 @@ MEDIA_ROOT = BASE_DIR / 'media'  # Or the appropriate path for your project
 
 
 
-ALLOWED_HOST = ['.vercel.app']
